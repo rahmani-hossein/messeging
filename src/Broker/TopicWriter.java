@@ -12,18 +12,23 @@ import java.util.HashMap;
 public class TopicWriter {
     RandomAccessFile buffer;
     FileWriter fileWriter;
-    static Object syncObject = new Object();
-    static Object transLock = new Object();
     private Topic topic;
     private HashMap<String, Transaction> transactions;
-     static MyWaitNotify myWaitNotify=new MyWaitNotify(Topic.lock1);
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
 
     TopicWriter(Topic topic) {
         this.topic = topic;
         transactions = new HashMap<>();
         try {
-            buffer = new RandomAccessFile(topic.getTopicFile().getPath(), "rws");
-            fileWriter=new FileWriter("debug.txt",true);
+            buffer = new RandomAccessFile(topic.getTopicFile(), "rws");
+            fileWriter = new FileWriter("debug.txt", true);
         } catch (FileNotFoundException e) {
             Logger.myLogger("file not found \n", true);
             e.printStackTrace();
@@ -33,14 +38,12 @@ public class TopicWriter {
     }
 
     public void put(String producerName, int value) {
-            if (value <= 0) {
-                handleTransactionOperation(producerName, value);
-            } else {
-                handleInsertOperation(producerName, value);
-            }
-            myWaitNotify.doNotify();
-        System.out.println(producerName);
+        if (value <= 0) {
+            handleTransactionOperation(producerName, value);
+        } else {
+            handleInsertOperation(producerName, value);
         }
+    }
 
 
     private void handleTransactionOperation(String producerName, int value) {
@@ -60,8 +63,9 @@ public class TopicWriter {
         if (transactions.containsKey(producerName)) {
             transactions.get(producerName).put(value);
         } else {
-            synchronized (Color.BLACK) {
+            synchronized (this) {
                 writeValue(value);
+                topic.notifyToAll();
             }
         }
     }
@@ -77,7 +81,7 @@ public class TopicWriter {
      */
     private void startTransaction(String producerName) {
         if (transactions.containsKey(producerName) && !transactions.get(producerName).getValues().isEmpty()) {
-            System.out.println(transactions.get(producerName).getValues().toString());
+           // System.out.println(transactions.get(producerName).getValues().toString());
             //To Do - Log the problem in finalizing previous transaction.
             commitTransaction(producerName);
             transactions.remove(producerName);
@@ -98,6 +102,8 @@ public class TopicWriter {
         if (transactions.containsKey(producerName)) {
             // System.out.println(producerName);
             transactions.get(producerName).commit();
+            transactions.remove(producerName);
+
         } else {
             //To Do - Log the problem in committing a non-existing transaction.
             Logger.myLogger("one problem during commiting ocuured because we dont have the key \n", true);
@@ -123,16 +129,16 @@ public class TopicWriter {
     public synchronized void writeValue(int value) {
         //To Do - Put the given value at the end of the topicFile
         try {
-            synchronized (topic) {
-                buffer.seek(buffer.length());
-                fileWriter.write((String.valueOf(value))+"\n");
-                fileWriter.flush();
-                buffer.writeInt(value);
 
-                System.out.println("complete write " + value);
-              // TopicReader.myWaitNotify.doNotify();
-                topic.notify();
-            }
+            //  buffer.seek(buffer.length());
+
+            buffer.writeInt(value);
+            fileWriter.write(value + "\n");
+            fileWriter.flush();
+
+            System.out.println("complete write " + value);
+            // TopicReader.myWaitNotify.doNotify();
+
 
         } catch (IOException e) {
             Logger.myLogger("problem in writing \n", true);

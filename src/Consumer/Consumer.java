@@ -14,15 +14,19 @@ public class Consumer extends Thread {
     }
 
     public int get() throws NoSuchTopicException {
-
-            return getMessageBroker().get(getTopicName(), consumerGroup.getGroupName(), consumerName);
+        return getMessageBroker().get(getTopicName(), consumerGroup.getGroupName(), consumerName);
 
     }
 
     public void run() {
         while (true) {
             try {
-                consumerGroup.performAction(this, get());
+                int i=get();
+                if (i==-3){
+                    System.out.println(this.consumerName+" finished");
+                    return;
+                }
+                consumerGroup.performAction(this, i);
             } catch (NoSuchTopicException e) {
                 e.printStackTrace();
             }

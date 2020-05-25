@@ -2,25 +2,30 @@ package Broker;
 
 public class MyWaitNotify {
 
-    Object monitorObject;
+   private final Object monitorObject;
+//for insist
+   volatile int numSignal;
 
-    int numSignal=0;
+   boolean free;
 
     MyWaitNotify() {
-        this(new Object(),0);
+      monitorObject=new Object();
+      free=true;
+      numSignal=0;
     }
 
-    MyWaitNotify(Object monitorObject) {
-        this(monitorObject,0);
-    }
-    MyWaitNotify(Object monitorObject,int  wasSignalled) {
-        this.monitorObject = monitorObject;
-        this.numSignal=wasSignalled;
-    }
+//    MyWaitNotify(Object monitorObject) {
+//        this(monitorObject,0);
+//    }
+//    MyWaitNotify(Object monitorObject,int  wasSignalled) {
+//        this.monitorObject = monitorObject;
+//        this.numSignal=wasSignalled;
+//    }
 
     public void doWait() {
         synchronized (monitorObject) {
-            while (numSignal>=0) {
+            // for we dont have any signal
+            while (numSignal<=0||!free) {
                 try {
                     monitorObject.wait();
                 } catch (InterruptedException e) {
@@ -28,13 +33,20 @@ public class MyWaitNotify {
                 }
             }
             numSignal--;
+            free=false;
         }
     }
-
+// for handle waiting statement
     public void doNotify(){
         synchronized (monitorObject){
-            numSignal++;
-            monitorObject.notify();
+           free=true;
+            monitorObject.notifyAll();
+        }
+    }
+    public void addToSignal(int num) {
+        synchronized (monitorObject) {
+            numSignal+=num;
+            monitorObject.notifyAll();
         }
     }
 }

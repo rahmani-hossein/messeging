@@ -16,6 +16,7 @@ public class ProducerGroup extends Thread {
         this.producerGroupDirectory = producerGroupDirectory;
         this.topicName = topicName;
         producers = new ArrayList<>();
+        this.messageBroker.addTopic(topicName);
     }
 
     private void initialize() {

@@ -15,15 +15,20 @@ public class MessageBroker {
         this.topics = topics;
     }
 
-    private void addTopic(String name) {
+    public void addTopic(String name) {
         topics.put(name, new Topic(name));
+    }
+
+    public void addConsumer(String consumerGroup, String topicName) throws NoSuchTopicException {
+        if (!topics.containsKey(topicName)) {
+            throw new NoSuchTopicException(topicName);
+        }
+        topics.get(topicName).addGroup(consumerGroup);
     }
 
     public void put(String topic, String producerName, int value) {
 
-        if (!topics.containsKey(topic)) {
-            addTopic(topic);
-        }
+        // checkForAdd(topic);
         topics.get(topic).put(producerName, value);
         //   monitor.doNotify();
 
@@ -42,6 +47,12 @@ public class MessageBroker {
         }
         return topics.get(topic).get(groupName, consumerName);
 
+    }
+
+    private void checkForAdd(String topic) {
+        if (!topics.containsKey(topic)) {
+            addTopic(topic);
+        }
     }
 
 }

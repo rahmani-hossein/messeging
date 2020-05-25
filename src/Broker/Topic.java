@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Topic {
     private String name;
      static Object lock1 = new Object();
-    private static Object lock2 = new Object();
+
 
 
     private File topicFile;
@@ -21,6 +21,8 @@ public class Topic {
         this.topicReaders = topicReaders;
     }
 
+
+
     public Topic(String name) {
         this.name = name;
         topicFile = new File(name + ".dat");
@@ -32,7 +34,7 @@ public class Topic {
         return topicFile;
     }
 
-    private void addGroup(String groupName) {
+    public void addGroup(String groupName) {
         topicReaders.put(groupName, new TopicReader(this, groupName));
     }
 
@@ -43,9 +45,9 @@ public class Topic {
      */
     public int get(String groupName, String consumerName) {
 
-            if (!topicReaders.containsKey(groupName)) {
-                addGroup(groupName);
-            }
+//            if (!topicReaders.containsKey(groupName)) {
+//                addGroup(groupName);
+//            }
             return topicReaders.get(groupName).get(consumerName);
 
     }
@@ -62,5 +64,10 @@ public class Topic {
         topicWriter.put(producerName, value);
 
 
+    }
+    public void notifyToAll(){
+        for (TopicReader value : topicReaders.values()) {
+            value.myNotify();
+        }
     }
 }

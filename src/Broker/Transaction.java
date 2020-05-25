@@ -18,8 +18,6 @@ public class Transaction {
         this.values = values;
     }
 
-    static Object lockWrite = new Object();
-
     Transaction(TopicWriter topicWriter, String producerName) {
         this.topicWriter = topicWriter;
         this.producerName = producerName;
@@ -31,17 +29,17 @@ public class Transaction {
     }
 
     void commit() {
-            synchronized (Color.BLACK) {
+            synchronized (topicWriter) {
                 topicWriter.writeValue(0);
                 while (!values.isEmpty()) {
-                    System.out.println(values);
-                    topicWriter.writeValue(values.remove());
+                    int value=values.remove();
+                    topicWriter.writeValue(value);
                 }
                 topicWriter.writeValue(-1);
+                //for every signal is for one consumer
+                topicWriter.getTopic().notifyToAll();
             }
     }
 
-    void read(){
 
-    }
 }
