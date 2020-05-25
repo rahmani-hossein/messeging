@@ -6,7 +6,6 @@ import java.util.Map;
 public class MessageBroker {
 
     private Map<String, Topic> topics = new HashMap<>();
-    private MyWaitNotify monitor = new MyWaitNotify(this);
 
     public Map<String, Topic> getTopics() {
         return topics;

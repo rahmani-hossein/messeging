@@ -14,6 +14,10 @@ public class ConsumerGroup extends Thread{
     private String groupName;
     private int numberOfConsumers;
 
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     private File consumerGroupFile;
     private PrintWriter printWriter;
 

@@ -14,11 +14,13 @@ public class Consumer extends Thread {
     }
 
     public int get() throws NoSuchTopicException {
-        return getMessageBroker().get(getTopicName(), consumerGroup.getGroupName(), consumerName);
+
+            return getMessageBroker().get(getTopicName(), consumerGroup.getGroupName(), consumerName);
+
     }
 
     public void run() {
-        while(true) {
+        while (true) {
             try {
                 consumerGroup.performAction(this, get());
             } catch (NoSuchTopicException e) {
@@ -30,8 +32,12 @@ public class Consumer extends Thread {
     public MessageBroker getMessageBroker() {
         return consumerGroup.getMessageBroker();
     }
+
     public String getConsumerName() {
         return consumerName;
     }
-    public String getTopicName() { return consumerGroup.getTopicName();    }
+
+    public String getTopicName() {
+        return consumerGroup.getTopicName();
+    }
 }

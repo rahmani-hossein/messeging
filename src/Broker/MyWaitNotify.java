@@ -3,37 +3,37 @@ package Broker;
 public class MyWaitNotify {
 
     Object monitorObject;
-    boolean isSignalled;
+
     int numSignal=0;
 
     MyWaitNotify() {
-        this(new Object(),false);
+        this(new Object(),0);
     }
 
     MyWaitNotify(Object monitorObject) {
-        this(monitorObject,false);
+        this(monitorObject,0);
     }
-    MyWaitNotify(Object monitorObject,boolean wasSignalled) {
+    MyWaitNotify(Object monitorObject,int  wasSignalled) {
         this.monitorObject = monitorObject;
-        this.isSignalled=wasSignalled;
+        this.numSignal=wasSignalled;
     }
 
     public void doWait() {
         synchronized (monitorObject) {
-            while (!isSignalled) {
+            while (numSignal>=0) {
                 try {
                     monitorObject.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            isSignalled=false;
+            numSignal--;
         }
     }
 
     public void doNotify(){
         synchronized (monitorObject){
-            isSignalled=true;
+            numSignal++;
             monitorObject.notify();
         }
     }

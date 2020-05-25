@@ -7,15 +7,22 @@ public class Topic {
     private String name;
      static Object lock1 = new Object();
     private static Object lock2 = new Object();
-    private MyWaitNotify myWaitNotify;
+
 
     private File topicFile;
     private TopicWriter topicWriter;
     private HashMap<String, TopicReader> topicReaders;
 
+    public HashMap<String, TopicReader> getTopicReaders() {
+        return topicReaders;
+    }
+
+    public void setTopicReaders(HashMap<String, TopicReader> topicReaders) {
+        this.topicReaders = topicReaders;
+    }
+
     public Topic(String name) {
         this.name = name;
-        myWaitNotify = new MyWaitNotify(this);
         topicFile = new File(name + ".dat");
         topicWriter = new TopicWriter(this);
         topicReaders = new HashMap<>();

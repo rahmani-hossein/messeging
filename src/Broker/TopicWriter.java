@@ -130,7 +130,8 @@ public class TopicWriter {
                 buffer.writeInt(value);
 
                 System.out.println("complete write " + value);
-                TopicReader.myWaitNotify.doNotify();
+              // TopicReader.myWaitNotify.doNotify();
+                topic.notify();
             }
 
         } catch (IOException e) {
