@@ -1,7 +1,9 @@
 
 "# Messaging" 
 
-<p style='direction:rtl;سلام من یه سری کامنت تو کد نوشتم که دست وپا شیکسته کدو توضیح میدهو همچنین programرو اضافه کردم تا برخی چیز ها را توضیح دهد : right'></p>
+<p style='direction:rtl; text-align: right'>به نام خداببینیم این چه
+dick
+ای به صورتمون میزنه</p>
 
 
 
