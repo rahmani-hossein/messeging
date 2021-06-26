@@ -6,7 +6,7 @@
  خوبی را ران کنیم
  .
  و یا مثلا
-<MATH>&int;_a_^b^{f(x)<over>1+x} dx</MATH>
+<MATH>&int;a_^b^{f(x)<over>1+x} dx</MATH>
  باید تعریف خوبی باشد
  .
  </div>
