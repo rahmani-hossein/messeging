@@ -6,7 +6,8 @@
  خوبی را ران کنیم
  .
  و یا مثلا
-<MATH>&int;a_^b^{f(x)<over>1+x} dx</MATH>
+<MATH>H(s) = ∫<sub>0</sub><sup>∞</sup> e<sup>-st</sup> h(t) dt</MATH>
+ 
  باید تعریف خوبی باشد
  .
  </div>
