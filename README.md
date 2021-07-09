@@ -1,6 +1,6 @@
 
 "# Messaging"
-<div dir="auto",style="display:inline">
+<div style="display:inline",dir="auto",>
  ما توی این امتحان کردنا میخواهیم
  program
  خوبی را ران کنیم
