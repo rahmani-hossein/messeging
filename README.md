@@ -1,9 +1,11 @@
 
 "# Messaging"
-<div style="display:inline">
+<span>
+ 
  ما توی این امتحان کردنا میخواهیم
+ program
  خوبی را ران کنیم
-  </div>
+  </span>
   .
  <div dir="auto",style="display:inline">
  و یا مثلا
